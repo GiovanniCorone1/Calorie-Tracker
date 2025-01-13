@@ -1,8 +1,9 @@
 import { useState , ChangeEvent} from 'react';
 import { categories } from '../data/categories';
+import { DataForm } from '../types/index';
 export const Form = () => {
   // state para el formulario
-  const[dataForm , setDataForm]=useState({
+  const[dataForm , setDataForm]=useState<DataForm>({
     category:1,
     activity:"",
     calories:0
@@ -10,6 +11,12 @@ export const Form = () => {
   // e:React.ChangeEvent<HTMLSelectElement> importamos ChangeEvent para eliminar el React
   // ChangeEvent<HTMLInputElement> es para los html de tipo input
   const handleChange =(e:ChangeEvent<HTMLSelectElement> | ChangeEvent<HTMLInputElement>)=>{
+    // include el array y si el valor de e.target.id es uno de lo que esta en el array devuelve true
+    //esto nos permite saber donde estamos escribiendo y para convertir la category en un number , ya que , en el state aparece en forma de string , aunque le hallamos puesto su type en el index
+    // entonces durante el seteo verifico mediante un ternario si estamos sobre el input necesario y si es así lo convierto de string a number con un "+"
+    const isNumberField = ["category","calories"].includes(e.target.id)
+    console.log(isNumberField)
+
     // hacemos que durante la escritura (evento change) se vaya guardando lo que escribimos
     setDataForm({
       // para que no se pierda los valores iniciales
@@ -17,7 +24,7 @@ export const Form = () => {
       //e.target nos permite identificar sobre que estamos escribiendo
       // asignamos al input que corresponde:valor que se ingrese
       // el uso de corchete hace que el valor sea diferente(propiedad computada (o computed property):Característica que permite definir dinámicamente el nombre de una clave) ,por cada ,input seleccionado , ya que , estamos usando la misma funcion para los 3 diferentes inputs
-      [e.target.id]:e.target.value
+      [e.target.id]:isNumberField ? +e.target.value :e.target.value
     })
   }
   return (
