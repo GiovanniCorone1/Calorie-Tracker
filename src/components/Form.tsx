@@ -6,13 +6,15 @@ type FormProp = {
   //es de tipo Dispatch , mediante un generic estamos indicando que el dispatch debe estar preparado para recibir una acción que siga la estructura de dataActions
   dispatch :Dispatch<dataActions>
 }
+
+const INITIALSTATE = {
+  category:1,
+  activity:"",
+  calories:0
+}
 export const Form = ({dispatch}:FormProp) => {
   // state para el formulario
-  const[dataForm , setDataForm]=useState<DataForm>({
-    category:1,
-    activity:"",
-    calories:0
-  })
+  const[dataForm , setDataForm]=useState<DataForm>(INITIALSTATE)
   // e:React.ChangeEvent<HTMLSelectElement> importamos ChangeEvent para eliminar el React
   // ChangeEvent<HTMLInputElement> es para los html de tipo input
   const handleChange =(e:ChangeEvent<HTMLSelectElement> | ChangeEvent<HTMLInputElement>)=>{
@@ -40,6 +42,8 @@ export const Form = ({dispatch}:FormProp) => {
     e.preventDefault();
     //enviando los datos que cambiara entonces usamos el dispatch
     dispatch({type:'save-data' , payload : {newData : dataForm}})
+    //luego de enviar los datos reiniciamos con los valores iniciales
+    setDataForm(INITIALSTATE)
   }
 
   return (
