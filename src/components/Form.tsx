@@ -1,11 +1,12 @@
 import { v4 as uuidv4 } from 'uuid';
-import { useState , ChangeEvent ,FormEvent , Dispatch} from 'react';
+import { useState , ChangeEvent ,FormEvent , Dispatch, useEffect} from 'react';
 import { categories } from '../data/categories';
 import { DataForm } from '../types/index';
-import { dataActions } from '../reducers/data-reducer';
+import { dataActions, dataInitialState } from '../reducers/data-reducer';
 type FormProp = {
   //es de tipo Dispatch , mediante un generic estamos indicando que el dispatch debe estar preparado para recibir una acción que siga la estructura de dataActions
-  dispatch :Dispatch<dataActions>
+  dispatch :Dispatch<dataActions>,
+  state : dataInitialState
 }
 
 const INITIALSTATE :DataForm= {
@@ -14,7 +15,17 @@ const INITIALSTATE :DataForm= {
   activity:"",
   calories:0
 }
-export const Form = ({dispatch}:FormProp) => {
+export const Form = ({dispatch , state }:FormProp) => {
+  //para la edicion del form
+  useEffect(()=>{
+    //si en el state intial hemos seleccionado el id , es decir , existe el selectId
+    if(state.selectId){
+      //en el state puede haber varios objetos con varios id,por ende , solo buscamos el del id que seleccionamos , y elegimos el primer objeto que cumple la condicion , ya que , seria el primero que seleccionamos
+      const selectDataId = state.data.filter(info => info.id === state.selectId)[0]
+      setDataForm(selectDataId)
+    }
+  },[state.selectId])
+
   // state para el formulario
   const[dataForm , setDataForm]=useState<DataForm>(INITIALSTATE)
   // e:React.ChangeEvent<HTMLSelectElement> importamos ChangeEvent para eliminar el React
@@ -47,7 +58,7 @@ export const Form = ({dispatch}:FormProp) => {
     //luego de enviar los datos reiniciamos con los valores iniciales
     setDataForm({
       ...INITIALSTATE,
-      id:uuidv4() //permite tener un id diferente
+      id:uuidv4() //permite tener un id diferente y unico
     })
   }
 

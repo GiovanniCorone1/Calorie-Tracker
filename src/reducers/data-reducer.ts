@@ -8,32 +8,50 @@ export type dataActions = {
   payload:{
     //este son los datos(objeto) que cambian al state y que es de tipo DataForm
     newData : DataForm
-  }
-}
+    }
+} |
+{type:'get-id',payload :{id : DataForm['id']}}
 
-//type del state inicial , que tomara el type del DataForm
-type dataInitialState = {
-  data : DataForm[]
+//type del state inicial , que tomara el type del DataForm,el id se usa ya que queremos otro estado donde se  utilice el id para editar la info
+export type dataInitialState = {
+  data : DataForm[],
+  selectId:DataForm['id']
 }
 //state inicial , en general se le pone como un objeto ,ya que, se puede tener varias propiedades ,pero puede ser un array , numero ,etc
 export const initialSate:dataInitialState={
-  data:[] //el state inicial tiene como valor inicial un array vacio
+  data:[], //el state inicial tiene como valor inicial un array vacio
+  selectId:""
 }
 
 //la funcion reducer
 export const dataReducer = (
   state:dataInitialState=initialSate , action :dataActions) =>{
     switch(action.type){
-      case 'save-data':
-        //muestra los datos ingrresados en el form
+      //a la hora que editemos sobreescriba los datos , y no cree otro 
+      case 'save-data':{
+        let updatedData:DataForm[]= []
+        if(state.selectId){
+          // action.payload.newData nos permitira actualizar donde se ha seleccionado a editar
+          updatedData=state.data.map((dataSelect)=>dataSelect.id === state.selectId ? action.payload.newData : dataSelect)
+        }else{
+          //luego se da submit al formulario tendremos nuevos datos , copiamos los datos que habian inicialmente con el sprint(...state.data , a diferencia del state de arriba aca solo se copia lo que hay en data[]) y le aumentamos la nueva data, finalmente tendremos un array de objetos con los nuevos datos
+          updatedData = [...state.data , action.payload.newData]
+        }
+        //muestra los datos ingresados en el form
         // console.log(action.payload.newData)
         //en el return debemos el estado actualizado
         return {
           // copiamos todos los datos del state iniciales , esto permite que si hubiera mas datos se copiarian
           ...state ,
-          //luego se da submit al formulario tendremos nuevos datos , copiamos los datos que habian inicialmente con el sprint(...state.data , a diferencia del state de arriba a ca solo se copia lo que hay en data[]) y le aumentamos la nueva data, finalmente tendremos un array de objetos con los nuevos datos
-          data : [...state.data , action.payload.newData]
+          data : updatedData,
+          selectId:"" //el id seleccionado lo reiniciamos para que al ingresar nuevos datos , estos no se sobreescriban donde se selecciono la edicion
         }
+      }
+      case 'get-id':
+          return{
+            ...state ,
+            selectId : action.payload.id
+          }
       default:
         return state
     }

@@ -1,7 +1,7 @@
 import { useReducer } from 'react';
 import { Form } from './components/Form';
 import { initialSate, dataReducer } from './reducers/data-reducer';
-import { DataList } from './components/dataList';
+import { DataList } from './components/DataList';
 
 function App() {
   const [state , dispatch]= useReducer(dataReducer , initialSate)
@@ -18,12 +18,14 @@ function App() {
           <Form
           // pasamos la funcion atraves de props
           dispatch = {dispatch}
+          state = {state}
           />
         </div>
       </section>
       <section className='p-10 mx-auto max-w-4xl'>
         <DataList
           data = {state.data} //solo le pasamos la data del objeto state
+          dispatch = {dispatch}
         />
       </section>
     </>
