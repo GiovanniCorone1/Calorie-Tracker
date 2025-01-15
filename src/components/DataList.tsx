@@ -1,4 +1,4 @@
-import { PencilSquareIcon } from '@heroicons/react/24/outline'
+import { PencilSquareIcon , XCircleIcon } from '@heroicons/react/24/outline'
 import { useMemo , Dispatch} from 'react';
 import { DataForm } from '../types/index';
 import { categories } from '../data/categories';
@@ -31,6 +31,10 @@ export const DataList = ({data , dispatch}:DataListProp) => {
               <button onClick={()=>dispatch({type:'get-id' , payload :{id:info.id}})}>
                 <PencilSquareIcon
                 className='h-8 w-8 text-gray-800'/>
+              </button>
+              <button onClick={()=>dispatch({type:'delete-data' , payload :{id:info.id}})}>
+                <XCircleIcon
+                className='h-8 w-8 text-red-600'/>
               </button>
             </div>
           </div>

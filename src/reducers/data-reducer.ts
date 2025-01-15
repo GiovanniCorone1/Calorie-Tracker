@@ -10,7 +10,8 @@ export type dataActions = {
     newData : DataForm
     }
 } |
-{type:'get-id',payload :{id : DataForm['id']}}
+{type:'get-id',payload :{id : DataForm['id']}} |
+{type:'delete-data',payload:{id:DataForm['id']}}
 
 //type del state inicial , que tomara el type del DataForm,el id se usa ya que queremos otro estado donde se  utilice el id para editar la info
 export type dataInitialState = {
@@ -52,6 +53,12 @@ export const dataReducer = (
             ...state ,
             selectId : action.payload.id
           }
+      case 'delete-data':
+        return{
+          ...state,
+          //devolvemos la data que no hemos seleccionado
+          data : state.data.filter(dataSelect => dataSelect.id !== action.payload.id)
+        }
       default:
         return state
     }
