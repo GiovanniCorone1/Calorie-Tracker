@@ -18,22 +18,23 @@ export type dataActions = {
     }
 } |
 {type:'get-id',payload :{id : DataForm['id']}} |
-{type:'delete-data',payload:{id:DataForm['id']}}
+{type:'delete-data',payload:{id:DataForm['id']}} |
+{type:'reboot'}
 
-//type del state inicial , que tomara el type del DataForm,el id se usa ya que queremos otro estado donde se  utilice el id para editar la info
+//type del state inicial , que tomara el type del DataForm,el id se usa ya que queremos otro estado donde se  utilice el id para editar la info, cada vez que es state cambie este tambien debe ser la forma de como el reducer retorne los valores,es decir , debe retornar una data y un selectId
 export type dataInitialState = {
   data : DataForm[],
   selectId:DataForm['id']
 }
 //state inicial , en general se le pone como un objeto ,ya que, se puede tener varias propiedades ,pero puede ser un array , numero ,etc
-export const initialSate:dataInitialState={
+export const initialState:dataInitialState={
   data:getSessionStorage(), //el state inicial sera lo que tenga la sessionStorage
   selectId:""
 }
 
 //la funcion reducer
 export const dataReducer = (
-  state:dataInitialState=initialSate , action :dataActions) =>{
+  state:dataInitialState=initialState , action :dataActions) =>{
     switch(action.type){
       //a la hora que editemos sobreescriba los datos , y no cree otro 
       case 'save-data':{
@@ -65,6 +66,12 @@ export const dataReducer = (
           ...state,
           //devolvemos la data que no hemos seleccionado
           data : state.data.filter(dataSelect => dataSelect.id !== action.payload.id)
+        }
+      case 'reboot':
+        return{
+          // regresamos todo el state vacio
+         data:[],
+         selectId:""
         }
       default:
         return state

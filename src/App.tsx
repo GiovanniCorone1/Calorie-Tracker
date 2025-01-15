@@ -1,20 +1,26 @@
-import { useReducer, useEffect } from 'react';
+import { useReducer, useEffect, useMemo } from 'react';
 import { Form } from './components/Form';
-import { initialSate, dataReducer } from './reducers/data-reducer';
+import { initialState, dataReducer } from './reducers/data-reducer';
 import { DataList } from './components/DataList';
 
 function App() {
-  const [state , dispatch]= useReducer(dataReducer , initialSate)
+  const [state , dispatch]= useReducer(dataReducer , initialState)
   //seteamos en el sessionStorage
   useEffect(()=>{
     sessionStorage.setItem('data',JSON.stringify(state.data))
   },[state.data])
+  //si hay elementos en el form devuelve true
+  const rebootApp = useMemo(() =>state.data.length > 0, [state.data])
   return (
     <>
       <header className="bg-stone-700 py-4">
         <div className="max-w-4xl mx-auto flex justify-between">
           <h1 className="text-white text-center text-lg font-bold uppercase">Calorie Tracker</h1>
-          <button>Actualizar</button>
+          <button className='bg-cyan-600 hover:bg-cyan-400 p-2 font-bold uppercase text-white cursor-pointer rounded-lg text-sm disabled:opacity-10'
+          disabled={!rebootApp} //si es true(hay elementos se permite enviar reiniciar)
+          onClick={()=>dispatch({type:'reboot'})} //enviamos la accion para reiniciar el formulario
+          >
+            Reiniciar App</button>
         </div>
       </header>
       <section className="bg-cyan-600 py-20 px-5">
