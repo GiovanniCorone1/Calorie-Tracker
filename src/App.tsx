@@ -1,10 +1,14 @@
-import { useReducer } from 'react';
+import { useReducer, useEffect } from 'react';
 import { Form } from './components/Form';
 import { initialSate, dataReducer } from './reducers/data-reducer';
 import { DataList } from './components/DataList';
 
 function App() {
   const [state , dispatch]= useReducer(dataReducer , initialSate)
+  //seteamos en el sessionStorage
+  useEffect(()=>{
+    sessionStorage.setItem('data',JSON.stringify(state.data))
+  },[state.data])
   return (
     <>
       <header className="bg-stone-700 py-4">

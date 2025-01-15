@@ -1,4 +1,11 @@
 import type { DataForm } from '../types/index';
+
+//obtener los datos del sessionStorage
+const getSessionStorage = ()=>{
+  const dataSessionStorage = sessionStorage.getItem('data')
+  return dataSessionStorage ? JSON.parse(dataSessionStorage):[]
+}
+
 //como base se debe tener el state initial , la funcion reducer y las acciones , el stateInitial y el reducer lo exportaremos en mi archivo app
 
 //las acciones(Es una "plantilla" que le dice a TypeScript qué tipo de datos esperar cuando despaches una acción.) lo ponemos de tipo type , ya que , nos permite definir como deben lucir esas acciones
@@ -20,7 +27,7 @@ export type dataInitialState = {
 }
 //state inicial , en general se le pone como un objeto ,ya que, se puede tener varias propiedades ,pero puede ser un array , numero ,etc
 export const initialSate:dataInitialState={
-  data:[], //el state inicial tiene como valor inicial un array vacio
+  data:getSessionStorage(), //el state inicial sera lo que tenga la sessionStorage
   selectId:""
 }
 
