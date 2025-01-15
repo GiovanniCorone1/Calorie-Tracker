@@ -4,6 +4,7 @@ export type Category = {
 }
 
 export type DataForm = {
+  id:string,
   category:number,
   activity:string,
   calories:number

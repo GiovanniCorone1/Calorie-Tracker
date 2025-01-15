@@ -1,3 +1,4 @@
+import { v4 as uuidv4 } from 'uuid';
 import { useState , ChangeEvent ,FormEvent , Dispatch} from 'react';
 import { categories } from '../data/categories';
 import { DataForm } from '../types/index';
@@ -7,7 +8,8 @@ type FormProp = {
   dispatch :Dispatch<dataActions>
 }
 
-const INITIALSTATE = {
+const INITIALSTATE :DataForm= {
+  id:uuidv4(),
   category:1,
   activity:"",
   calories:0
@@ -43,7 +45,10 @@ export const Form = ({dispatch}:FormProp) => {
     //enviando los datos que cambiara entonces usamos el dispatch
     dispatch({type:'save-data' , payload : {newData : dataForm}})
     //luego de enviar los datos reiniciamos con los valores iniciales
-    setDataForm(INITIALSTATE)
+    setDataForm({
+      ...INITIALSTATE,
+      id:uuidv4() //permite tener un id diferente
+    })
   }
 
   return (
