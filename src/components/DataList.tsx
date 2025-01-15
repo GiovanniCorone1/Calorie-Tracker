@@ -12,10 +12,12 @@ export const DataList = ({data , dispatch}:DataListProp) => {
   //cada vez que hay una nueva categories(nuevos datos) se usa el useMemo
   //DataForm['category'] significa que solo usamos la category de ese array
   const categoryName = useMemo(() => (category : DataForm['category'])=> categories.map((cat)=>cat.id === category ? cat.name : ""), [categories])
+  //si no hay actividades y/o comida mostramos un mensaje ,es decir , array vacio ,lo ponemos en un useMemo
+  const isEmptyData = useMemo(() => data.length === 0, [data])
   return (
     <>
       <h2 className="text-4xl font-bold text-slate-600 text-center">Comida y Actividades</h2>
-      {
+      {isEmptyData ? <p className='text-center my-5'>No hay comida ni actividades</p> :
         data.map((info)=>(
           <div key={info.id} className='px-5 py-10 bg-slate-100 mt-5 flex justify-between'>
             <div className='space-y-2 relative'>
