@@ -2,6 +2,7 @@ import { useReducer, useEffect, useMemo } from 'react';
 import { Form } from './components/Form';
 import { initialState, dataReducer } from './reducers/data-reducer';
 import { DataList } from './components/DataList';
+import { CalorieTracker } from './components/CalorieTracker';
 
 function App() {
   const [state , dispatch]= useReducer(dataReducer , initialState)
@@ -29,6 +30,13 @@ function App() {
           // pasamos la funcion atraves de props
           dispatch = {dispatch}
           state = {state}
+          />
+        </div>
+      </section>
+      <section className='bg-stone-700 py-10'>
+        <div className='max-w-4xl mx-auto'>
+          <CalorieTracker
+            data = {state.data}
           />
         </div>
       </section>
